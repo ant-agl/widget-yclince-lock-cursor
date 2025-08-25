@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+
 import { useAppStore } from '@/shared/store/app';
 
 const email = ref('');

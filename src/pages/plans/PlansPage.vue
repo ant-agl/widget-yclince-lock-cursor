@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAppStore } from '@/shared/store/app';
+
 import { diffInDays, formatDate } from '@/shared/lib/date';
+import { useAppStore } from '@/shared/store/app';
 
 const store = useAppStore();
 
@@ -20,7 +21,7 @@ const onPay = () => {
 
 <template>
   <a-space direction="vertical" style="width: 100%">
-    <a-alert type="info" show-icon v-if="store.paidUntil">
+    <a-alert v-if="store.paidUntil" type="info" show-icon>
       <template #message>
         До конца подписки осталось
         {{ diffInDays(new Date(), store.paidUntil as Date) }}

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 // Корневой макет приложения для iFrame-виджета
+import { computed } from 'vue'
+
 import IndexTabs from '@/pages/index/IndexTabs.vue'
 import { useAppStore } from '@/shared/store/app'
-import { computed } from 'vue'
 
 const store = useAppStore()
 const showLowKeys = computed(() => store.isLowKeys)

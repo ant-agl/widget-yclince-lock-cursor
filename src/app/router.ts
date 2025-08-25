@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router';
+
 import { useAppStore } from '@/shared/store/app';
 
 const routes: RouteRecordRaw[] = [
