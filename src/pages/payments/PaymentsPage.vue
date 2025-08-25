@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { formatDate } from '@/shared/lib/date';
 
 interface PaymentRow { id: string; date: string; amount: number; plan: string }

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
-import type { PlanOption, UserAuth, LockItem, ObjectItem } from '@/shared/api/types';
 import { mockLogin, mockLocks, mockObjects, mockPlans } from '@/shared/api/mocks';
+import type { PlanOption, UserAuth, LockItem, ObjectItem } from '@/shared/api/types';
 import { addYears, formatDate } from '@/shared/lib/date';
 
 export const useAppStore = defineStore('app', () => {

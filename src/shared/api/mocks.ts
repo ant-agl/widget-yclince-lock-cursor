@@ -1,6 +1,6 @@
 import type { PlanOption, UserAuth, LockItem, ObjectItem } from './types';
 
-export const mockLogin = async (email: string, password: string): Promise<UserAuth> => {
+export const mockLogin = async (_email: string, _password: string): Promise<UserAuth> => {
   // имитация сетевого запроса
   await new Promise((r) => setTimeout(r, 300));
   return { userId: 3, token: '39l9BvfhqTuIHEBVc3k1...' };

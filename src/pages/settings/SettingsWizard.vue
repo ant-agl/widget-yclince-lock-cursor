@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import draggable from 'vuedraggable';
+
+import type { LockItem } from '@/shared/api/types';
 import { useAppStore } from '@/shared/store/app';
 
 type Entity = 'company' | 'contact';
@@ -19,15 +21,21 @@ const filteredLocks = computed(() =>
 );
 
 // Возвращает реальные объекты замков, привязанных к объекту (без undefined)
-const getObjectLocks = (objectId: string) => {
+const getObjectLocks = (objectId: string): LockItem[] => {
   const obj = store.objects.find((o) => o.id === objectId);
-  if (!obj) return [] as any[];
+  if (!obj) return [] as LockItem[];
   return obj.locks
     .map((id) => store.locks.find((l) => l.id === id))
     .filter((x): x is NonNullable<typeof x> => Boolean(x));
 };
 
-const onChange = (objectId: string, e: any) => {
+// Тип события для vuedraggable (минимально необходимый)
+type DraggableChangeEvent<T> = {
+  added?: { element: T } | null
+  removed?: { element: T } | null
+} | null
+
+const onChange = (objectId: string, e: DraggableChangeEvent<LockItem>) => {
   if (e?.added?.element) {
     const el = e.added.element as { id: string };
     if (el?.id) store.linkLockToObject(el.id, objectId);
@@ -43,6 +51,9 @@ const removeFromObject = (objectId: string, lockId: string) => {
 };
 
 const hasAnyLinked = computed(() => store.locks.some((l) => l.linkedTo));
+
+// Клон элемента для vuedraggable — избавляемся от стрелки в шаблоне
+const cloneLock = (lock: LockItem): LockItem => ({ ...lock });
 </script>
 
 <template>
@@ -66,7 +77,7 @@ const hasAnyLinked = computed(() => store.locks.some((l) => l.linkedTo));
                   :group="{ name: 'locks', pull: false, put: true }"
                   item-key="id"
                   :sort="false"
-                  @change="e => onChange(o.id, e)"
+                  @change="onChange(o.id, $event)"
                 >
                   <template #item="{ element }">
                     <a-tag closable class="lock-chip" @close="() => removeFromObject(o.id, element!.id)">
@@ -93,14 +104,14 @@ const hasAnyLinked = computed(() => store.locks.some((l) => l.linkedTo));
               :list="filteredLocks"
               :group="{ name: 'locks', pull: 'clone', put: false }"
               item-key="id"
-              :clone="e => e"
+              :clone="cloneLock"
               :sort="false"
             >
               <template #item="{ element }">
                 <div class="lock-row">
                   <span class="lock-title">{{ element.name }}</span>
-                  <a-badge status="processing" v-if="!element.linkedTo" />
-                  <a-badge status="default" v-else />
+                  <a-badge v-if="!element.linkedTo" status="processing" />
+                  <a-badge v-else status="default" />
                 </div>
               </template>
             </draggable>

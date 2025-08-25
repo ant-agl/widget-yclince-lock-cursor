@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
 import { computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
 import { useAppStore } from '@/shared/store/app';
 
 const router = useRouter();
@@ -16,7 +17,7 @@ const isAuthed = computed(() => Boolean(store.token));
 </script>
 
 <template>
-  <a-tabs v-model:activeKey="activeKey">
+  <a-tabs v-model:active-key="activeKey">
     <a-tab-pane v-if="!isAuthed" key="/auth" tab="Авторизация" />
     <a-tab-pane v-if="isAuthed" key="/plans" tab="Тариф" />
     <a-tab-pane v-if="isAuthed" key="/settings" tab="Настройка" />
